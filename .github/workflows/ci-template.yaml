@@ -2,6 +2,10 @@
 name: Continuous Integration
 on:
   workflow_call:
+    inputs:
+      governance-test:
+        type: boolean
+        default: false
 
 jobs:
   validate:
@@ -98,6 +102,21 @@ jobs:
           displayName: 'Governance-Sandbox'
           templateFilePath: 'templates/core/governance/mgmt-groups/sandbox/main.bicep'
           templateParametersFilePath: 'templates/core/governance/mgmt-groups/sandbox/main.bicepparam'
+          subscriptionId: '${{ env.SUBSCRIPTION_ID_MANAGEMENT }}'
+          resourceGroupName: ''
+          location: '${{ env.LOCATION }}'
+          deploymentType: 'managementGroup'
+          firstRunWhatIf: 'false'
+          whatIfEnabled: 'true'
+
+      - name: 'What If: Governance-Test'
+        if: ${{ inputs.governance-test }}
+        uses: alz-prince-lab/t4308-alz-templates/.github/actions/bicep-deploy@main
+        with:
+          name: 'governance-test'
+          displayName: 'Governance-Test'
+          templateFilePath: 'templates/core/governance/mgmt-groups/test/main.bicep'
+          templateParametersFilePath: 'templates/core/governance/mgmt-groups/test/main.bicepparam'
           subscriptionId: '${{ env.SUBSCRIPTION_ID_MANAGEMENT }}'
           resourceGroupName: ''
           location: '${{ env.LOCATION }}'
