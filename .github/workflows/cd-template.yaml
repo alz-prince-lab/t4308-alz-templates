@@ -12,6 +12,9 @@ on:
       governance-sandbox:
         type: boolean
         default: true
+      governance-test:
+        type: boolean
+        default: false
 
 jobs:
   whatif:
@@ -88,6 +91,21 @@ jobs:
           whatIfEnabled: 'true'
 
 
+      - name: 'Plan: Governance-Test'
+        if: ${{ inputs.governance-test }}
+        uses: alz-prince-lab/t4308-alz-templates/.github/actions/bicep-deploy@main
+        with:
+          name: 'governance-test'
+          displayName: 'Governance-Test'
+          templateFilePath: 'templates/core/governance/mgmt-groups/test/main.bicep'
+          templateParametersFilePath: 'templates/core/governance/mgmt-groups/test/main.bicepparam'
+          subscriptionId: '${{ env.SUBSCRIPTION_ID_MANAGEMENT }}'
+          resourceGroupName: ''
+          location: '${{ env.LOCATION }}'
+          deploymentType: 'managementGroup'
+          firstRunWhatIf: 'false'
+          whatIfEnabled: 'true'
+
   deploy:
     name: Deploy
     needs: whatif
@@ -148,6 +166,19 @@ jobs:
           displayName: 'Governance-Sandbox'
           templateFilePath: 'templates/core/governance/mgmt-groups/sandbox/main.bicep'
           templateParametersFilePath: 'templates/core/governance/mgmt-groups/sandbox/main.bicepparam'
+          subscriptionId: '${{ env.SUBSCRIPTION_ID_MANAGEMENT }}'
+          resourceGroupName: ''
+          location: '${{ env.LOCATION }}'
+          deploymentType: 'managementGroup'
+
+      - name: 'Deploy: Governance-Test'
+        if: ${{ inputs.governance-test }}
+        uses: alz-prince-lab/t4308-alz-templates/.github/actions/bicep-deploy@main
+        with:
+          name: 'governance-test'
+          displayName: 'Governance-Test'
+          templateFilePath: 'templates/core/governance/mgmt-groups/test/main.bicep'
+          templateParametersFilePath: 'templates/core/governance/mgmt-groups/test/main.bicepparam'
           subscriptionId: '${{ env.SUBSCRIPTION_ID_MANAGEMENT }}'
           resourceGroupName: ''
           location: '${{ env.LOCATION }}'
