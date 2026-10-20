@@ -49,7 +49,7 @@ jobs:
         with:
           client-id: ${{ vars.AZURE_CLIENT_ID }}
           tenant-id: ${{ vars.AZURE_TENANT_ID }}
-          subscription-id: ${{ vars.AZURE_SUBSCRIPTION_ID }}
+          allow-no-subscriptions: true
           enable-AzPSSession: true
 
       - name: Check for First Deployment
@@ -124,7 +124,7 @@ jobs:
         with:
           client-id: ${{ vars.AZURE_CLIENT_ID }}
           tenant-id: ${{ vars.AZURE_TENANT_ID }}
-          subscription-id: ${{ vars.AZURE_SUBSCRIPTION_ID }}
+          allow-no-subscriptions: true
           enable-AzPSSession: true
 
       - name: 'Deploy: Governance-Intermediate Root'
@@ -152,4 +152,3 @@ jobs:
           resourceGroupName: ''
           location: '${{ env.LOCATION }}'
           deploymentType: 'managementGroup'
-
